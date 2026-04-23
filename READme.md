@@ -345,92 +345,64 @@ Path‑based filtering creates many unnecessary URL variations.
 
 
 
-Part 4
+# Part 4
 
-**Benefits of the Sub‑Resource Locator Pattern**
+## Benefits of the Sub‑Resource Locator Pattern
 
-The Sub‑Resource Locator pattern allows a parent resource (e.g., /sensors) to dynamically return another resource class (e.g., SensorReadingResource) to handle deeper nested paths such as:
+The Sub‑Resource Locator pattern allows a parent resource (e.g., `/sensors`) to dynamically return another resource class (e.g., `SensorReadingResource`) to handle deeper nested paths such as:
 
-/sensors/{id}/readings
+- `/sensors/{id}/readings`
+- `/sensors/{id}/readings/{readingId}`
 
-/sensors/{id}/readings/{readingId}
-
-
-
-1\. Separation of concerns
+### 1. Separation of concerns
 
 Instead of placing all logic inside one massive controller, each resource class focuses on a single domain:
 
-SensorResource → sensor metadata
-
-SensorReadingResource → historical readings
+- `SensorResource` → sensor metadata
+- `SensorReadingResource` → historical readings
 
 This keeps classes small, readable, and maintainable.
 
-
-
-2\. Cleaner, more scalable architecture
+### 2. Cleaner, more scalable architecture
 
 As APIs grow, nested paths become complex:
 
-/sensors/{id}/readings
-
-/sensors/{id}/readings/{rid}
-
-/sensors/{id}/readings/latest
-
-/sensors/{id}/readings/stats
+- `/sensors/{id}/readings`
+- `/sensors/{id}/readings/{rid}`
+- `/sensors/{id}/readings/latest`
+- `/sensors/{id}/readings/stats`
 
 Without sub‑resource locators, all of these would be forced into one giant class.
 
 With locators, each nested domain gets its own class, making the API easier to extend.
 
+### 3. Dynamic binding based on runtime values
 
-
-3\. Dynamic binding based on runtime values
-
-The locator receives the {sensorId} and constructs a resource instance bound to that specific sensor.
+The locator receives the `{sensorId}` and constructs a resource instance bound to that specific sensor.
 
 This allows:
+- Per‑sensor state
+- Cleaner validation
+- More intuitive code structure
 
-Per‑sensor state
+### 4. Better organisation for large teams
 
-Cleaner validation
-
-More intuitive code structure
-
-
-
-4\. Better organisation for large teams
-
-Different developers can work on:
-
-Sensor logic
-
-Reading logic
-
-Analytics logic
-
+different developers can work on:
+- Sensor logic 
+- Reading logic 
+- Analytics logic 
 …without touching the same file or causing merge conflicts.
 
+### 5. More REST‑aligned design
 
-
-5\. More REST‑aligned design
-
-REST encourages modelling resources as a hierarchy.
-
+the REST approach encourages modeling resources as a hierarchy.
 Sub‑resource locators map this hierarchy directly into code:
 
-Sensor → SensorReadings → IndividualReading
-
+e.g., `Sensor` → `SensorReadings` → `IndividualReading`
 This mirrors the URL structure and improves conceptual clarity.
 
-
-
-Summary
-
+## Summary
 The Sub‑Resource Locator pattern reduces complexity, improves maintainability, and keeps large APIs modular.
-
 It prevents “God classes” and allows each nested resource to evolve independently.
 
 
