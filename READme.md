@@ -228,81 +228,54 @@ Returning full objects improves convenience and reduces client complexity, while
 The best choice depends on the expected client workload and performance constraints.
 
 
-**Idempotency of DELETE in My Implementation**
+# Idempotency of DELETE in My Implementation
 
-In my implementation, the DELETE /rooms/{roomId} operation is idempotent.
+In my implementation, the `DELETE /rooms/{roomId}` operation is idempotent.
 
-On the first successful DELETE:
+## Behavior on the First Successful DELETE:
+- If the room exists and has no sensors, it is removed from the in-memory map.
+- The server returns `204 No Content`.
 
-If the room exists and has no sensors, it is removed from the in‑memory map.
+## Behavior on Subsequent Identical DELETE Requests for the Same `roomId`:
+- The room no longer exists in the map.
+- The server returns `404 Not Found`, but the server state does not change any further.
 
-The server returns 204 No Content.
+## Key Property of Idempotency:
+Performing the same operation multiple times has the same effect on server state as performing it once.
 
+Even though the HTTP status code differs (`204` on first delete, `404` afterwards),
+the resulting state of the system is the same: **the room is absent**.
 
+Therefore, **the DELETE operation is idempotent** in this design.
 
-On subsequent identical DELETE requests for the same roomId:
+---
 
-The room no longer exists in the map.
+# Part 3: What Happens If the Client Sends the Wrong Content-Type?
 
-The server returns 404 Not Found, but the server state does not change any further.
+The `@Consumes(MediaType.APPLICATION_JSON)` annotation tells JAX-RS that the POST method only accepts JSON input.
 
+If a client sends data in another format (e.g., `text/plain`, `application/xml`, or no content type at all),
+jax-rs performs content negotiation and detects that it cannot find a suitable message body reader to convert
+the incoming payload into a Sensor object.
 
+## Technical Consequences:
+- JAX-RS rejects the request before the method is even executed.
+- The framework automatically returns:
+  - **415 Unsupported Media Type**
 
-The key property of idempotency is that performing the same operation multiple times has the same effect on server state as performing it once.
+## Why This Happens:
+- JAX-RS uses built-in and registered providers (like Jackson) to convert JSON into Java objects.
+- If the incoming Content-Type does not match any available provider:
+  - No deserializer can handle the payload.
+  - JAX-RS aborts the request.
+  - The resource method is never called.
 
-Even though the HTTP status code differs (204 on first delete, 404 afterwards), the resulting state of the system is the same: the room is absent.
-
-Therefore, the DELETE operation is idempotent in this design.
-
-
-
-Part 3
-
-**What Happens If the Client Sends the Wrong Content-Type?**
-
-The @Consumes(MediaType.APPLICATION\_JSON) annotation tells JAX‑RS that the POST method only accepts JSON input.
-
-
-
-If a client sends data in another format (e.g., text/plain, application/xml, or no content type at all), JAX‑RS performs content negotiation and detects that it cannot find a suitable message body reader to convert the incoming payload into a Sensor object.
-
-
-
-Technical consequences
-
-JAX‑RS rejects the request before the method is even executed.
-
-The framework automatically returns:
-
-415 Unsupported Media Type
-
-
-
-Why this happens
-
-JAX‑RS uses built‑in and registered providers (like Jackson) to convert JSON into Java objects.
-
-If the incoming Content-Type does not match any available provider:
-
-No deserializer can handle the payload
-
-JAX‑RS aborts the request
-
-The resource method is never called
-
-
-
-Summary
-
-@Consumes(MediaType.APPLICATION\_JSON) ensures that:
-
-The server only accepts JSON
-
-Invalid formats are rejected early
-
-The client receives a clear 415 error
-
-The API remains predictable and safe
+## Summary:
+- `@Consumes(MediaType.APPLICATION_JSON)` ensures that:
+  - The server only accepts JSON.
+  - Invalid formats are rejected early.
+  - The client receives a clear **415 error**.
+  - The API remains predictable and safe.
 
 
 
