@@ -458,122 +458,72 @@ Therefore, 422 is the most semantically accurate status code for missing linked 
 
 
 
-**Cybersecurity Risks of Exposing Java Stack Traces**
+# Cybersecurity Risks of Exposing Java Stack Traces
 
 From a cybersecurity standpoint, exposing internal Java stack traces to external API consumers is extremely dangerous.
 
 A stack trace reveals internal implementation details that attackers can exploit.
 
-
-
-1\. Technology Fingerprinting
+## 1. Technology Fingerprinting
 
 A stack trace exposes:
-
-The exact Java version
-
-The JAX‑RS implementation (Jersey, RESTEasy, etc.)
-
-Internal libraries and versions
-
-Frameworks and server containers
+- The exact Java version
+- The JAX‑RS implementation (Jersey, RESTEasy, etc.)
+- Internal libraries and versions
+- Frameworks and server containers
 
 Attackers use this information to identify known vulnerabilities in those components.
 
-
-
-2\. File Paths and Server Structure
+## 2. File Paths and Server Structure
 
 Stack traces often reveal:
-
-Absolute file paths
-
-Directory layouts
-
-Package names
-
-Class names and method names
+- Absolute file paths
+- Directory layouts
+- Package names
+- Class names and method names
 
 This helps attackers map your server’s internal structure, making targeted attacks easier.
 
-
-
-3\. Sensitive Logic Exposure
+## 3. Sensitive Logic Exposure
 
 Stack traces can reveal:
-
-Internal business logic
-
-Validation rules
-
-Hidden endpoints
-
-Database interaction layers
-
-Names of private classes and methods
+- Internal business logic
+- Validation rules
+- Hidden endpoints
+- Database interaction layers
+- Names of private classes and methods
 
 This information can be used to craft precise malicious requests.
 
-
-
-4\. Injection Attack Assistance
+## 4. Injection Attack Assistance
 
 If an exception originates from:
-
-SQL queries
-
-JSON parsing
-
+- SQL queries
+- JSON parsing
 XML parsing
-
-File handling
-
-
-
-…the stack trace may expose:
-
-SQL statements
-
-Table names
-
-Column names
-
-ORM mappings
-
+File handling,
+the stack trace may expose:
+- SQL statements,
+- Table names,
+- Column names,
+- ORM mappings.
 This dramatically increases the success rate of SQL injection or deserialization attacks.
 
-
-
-5\. Denial‑of‑Service (DoS) Amplification
-
+## 5. Denial‑of‑Service (DoS) Amplification 
 Verbose stack traces:
-
-Increase response size
-
-Increase CPU load
-
-Make it easier to craft requests that trigger expensive error paths
-
+- Increase response size 
+- Increase CPU load 
+- Make it easier to craft requests that trigger expensive error paths.
 Attackers can exploit this to degrade or crash the service.
 
-
-
-Summary
-
+### Summary 
 Exposing stack traces gives attackers:
-
-What technology you use
-
-How your code is structured
-
-Where your files live
-
-What your internal logic looks like
-
-What libraries and versions you run
-
-Potential injection points
-
+- What technology you use 
+- How your code is structured 
+- Where your files live 
+- What your internal logic looks like 
+- What libraries and versions you run 
+- Potential injection points.
 This is why professional APIs never expose stack traces and always use a global 500 mapper.
 
 
