@@ -1,44 +1,58 @@
-Overview of the API design
+# Smart Campus REST API Documentation
+
+## Overview of the API Design
 
 This project implements a Smart Campus REST API using JAX-RS (Jersey) and in-memory data structures (HashMap, ArrayList).
+
 The API exposes resources for:
-Discovery: GET /api/v1 with metadata and resource map
-Rooms: CRUD-style operations for campus rooms
-Sensors: Registration and filtering of sensors linked to rooms
-Readings: Nested sub-resources for sensor readings with historical logs
+* **Discovery:** `GET /api/v1` with metadata and resource map
+* **Rooms:** CRUD-style operations for campus rooms
+* **Sensors:** Registration and filtering of sensors linked to rooms
+* **Readings:** Nested sub-resources for sensor readings with historical logs
 
-The design uses:
-Sub-resource locators for /sensors/{sensorId}/readings
-Custom exceptions + ExceptionMappers for 409, 422, 403, 500
-JAX-RS filters for request/response logging
-HATEOAS-style links in the discovery endpoint
+### Design Features
+* Sub-resource locators for `/sensors/{sensorId}/readings`
+* Custom exceptions + `ExceptionMappers` for 409, 422, 403, 500
+* JAX-RS filters for request/response logging
+* HATEOAS-style links in the discovery endpoint
 
-Build and run instructions
-Prerequisites
-Java 17 (or your module’s required version)
-Maven installed and on your PATH
+---
 
-Clone the repository
-git clone https://github.com/SoheibKaddouri/smart-campus-api.git
-cd smart-campus-api
+## Build and Run Instructions
 
-Build the project
-mvn clean install
+### Prerequisites
+* Java 17 (or your module’s required version)
+* Maven installed and on your PATH
 
-Run the server
-mvn exec:java -Dexec.mainClass="com.smartcampus.server.ServerLauncher"
+### Setup
+1.  **Clone the repository**
+    ```bash
+    git clone [https://github.com/SoheibKaddouri/smart-campus-api.git](https://github.com/SoheibKaddouri/smart-campus-api.git)
+    cd smart-campus-api
+    ```
+2.  **Build the project**
+    ```bash
+    mvn clean install
+    ```
+3.  **Run the server**
+    ```bash
+    mvn exec:java -Dexec.mainClass="com.smartcampus.server.ServerLauncher"
+    ```
 
-Base URL
-The API will be available at:
-http://localhost:8080/api/v1
+### Base URL
+The API will be available at: `http://localhost:8080/api/v1`
 
-Sample curl commands
-Adjust IDs to match what you create in your own tests.
+---
 
-1. Discovery endpoint
+## Sample curl commands
+*Adjust IDs to match what you create in your own tests.*
+
+### 1. Discovery endpoint
+```bash
 curl -X GET http://localhost:8080/api/v1
-
-2. Create a room
+```
+### 2. Create a Room
+```bash
 curl -X POST http://localhost:8080/api/v1/rooms \
   -H "Content-Type: application/json" \
   -d '{
@@ -46,8 +60,9 @@ curl -X POST http://localhost:8080/api/v1/rooms \
     "name": "Library Study Room 301",
     "capacity": 20
   }'
-
+```
 3. Create a sensor (valid roomId)
+```bash
 curl -X POST http://localhost:8080/api/v1/sensors \
   -H "Content-Type: application/json" \
   -d '{
@@ -57,11 +72,13 @@ curl -X POST http://localhost:8080/api/v1/sensors \
     "currentValue": 21.5,
     "roomId": "LIB-301"
   }'
-
+```
 4. Filter sensors by type
+```bash
 curl -X GET "http://localhost:8080/api/v1/sensors?type=Temperature"
-
-5. Add a reading to a sensor
+```
+6. Add a reading to a sensor
+```bash
 curl -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings \
   -H "Content-Type: application/json" \
   -d '{
@@ -69,8 +86,9 @@ curl -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings \
     "timestamp": "2025-04-23T10:00:00Z",
     "value": 22.3
   }'
-
-6. Trigger 422 (invalid roomId for sensor)
+```
+8. Trigger 422 (invalid roomId for sensor)
+```bash
 curl -X POST http://localhost:8080/api/v1/sensors \
   -H "Content-Type: application/json" \
   -d '{
@@ -80,6 +98,7 @@ curl -X POST http://localhost:8080/api/v1/sensors \
     "currentValue": 19.0,
     "roomId": "NON_EXISTENT_ROOM"
   }'
+```
 
 Report Answers
 
