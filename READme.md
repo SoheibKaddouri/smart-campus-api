@@ -61,7 +61,7 @@ curl -X POST http://localhost:8080/api/v1/rooms \
     "capacity": 20
   }'
 ```
-3. Create a sensor (valid roomId)
+### 3. Create a Sensor (Valid Room ID)
 ```bash
 curl -X POST http://localhost:8080/api/v1/sensors \
   -H "Content-Type: application/json" \
@@ -73,11 +73,11 @@ curl -X POST http://localhost:8080/api/v1/sensors \
     "roomId": "LIB-301"
   }'
 ```
-4. Filter sensors by type
+### 4. Filter Sensors by Type
 ```bash
 curl -X GET "http://localhost:8080/api/v1/sensors?type=Temperature"
 ```
-6. Add a reading to a sensor
+### 5. Add a Reading to a Sensor
 ```bash
 curl -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings \
   -H "Content-Type: application/json" \
@@ -87,7 +87,7 @@ curl -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings \
     "value": 22.3
   }'
 ```
-8. Trigger 422 (invalid roomId for sensor)
+### 6. Trigger 422 (Invalid Room ID for Sensor)
 ```bash
 curl -X POST http://localhost:8080/api/v1/sensors \
   -H "Content-Type: application/json" \
