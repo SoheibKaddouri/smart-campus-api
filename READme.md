@@ -101,73 +101,42 @@ curl -X POST http://localhost:8080/api/v1/sensors \
 ```
 
 ## Report Answers
-Part 1
+# Part 1: JAX‑RS Resource Lifecycle
 
-**JAX‑RS Resource Lifecycle**
+By default, JAX‑RS resource classes use a **per‑request** lifecycle.
 
-By default, JAX‑RS resource classes use a per‑request lifecycle.
+### This means:
+* A new instance of the resource class is created for every incoming HTTP request.
+* After the request is processed, the instance becomes eligible for garbage collection.
+* The resource class is not treated as a singleton unless explicitly annotated with `@Singleton`.
 
-This means:
+---
 
-
-
-A new instance of the resource class is created for every incoming HTTP request.
-
-After the request is processed, the instance becomes eligible for garbage collection.
-
-The resource class is not treated as a singleton unless explicitly annotated with @Singleton.
-
-
-
-Impact on In‑Memory Data Structures
+## Impact on In‑Memory Data Structures
 
 Because each request receives a fresh instance:
+* **Instance fields are NOT shared between requests**
+    * → You cannot store application data inside resource class fields.
+* **Shared data must be stored in static structures**
+    * *e.g.*, `private static Map<String, Room> rooms = new HashMap<>();`
 
-
-
-Instance fields are NOT shared between requests
-
-→ You cannot store application data inside resource class fields.
-
-
-
-Shared data must be stored in static structures  
-
-e.g.,
-
-
-
-private static Map<String, Room> rooms = new HashMap<>();
-
-
-
+### Concurrency Concerns
 Since multiple requests may access these structures at the same time, you must consider:
+* Race conditions
+* Concurrent modifications
+* Thread safety
 
-Race conditions
+### How to avoid data loss or corruption
+* **Use thread‑safe collections** (e.g., `ConcurrentHashMap`)
+* **Or synchronize access manually**
+* **Or ensure operations are atomic** (e.g., check‑then‑insert)
 
-Concurrent modifications
+---
 
-Thread safety
-
-
-
-How to avoid data loss or corruption
-
-Use thread‑safe collections (e.g., ConcurrentHashMap)
-
-Or synchronize access manually
-
-Or ensure operations are atomic (e.g., check‑then‑insert)
-
-
-
-Why this lifecycle is beneficial
-
-It avoids shared mutable state inside resource objects
-
-It keeps resource classes stateless and safe
-
-It scales well under high load
+## Why this lifecycle is beneficial
+* It avoids shared mutable state inside resource objects
+* It keeps resource classes stateless and safe
+* It scales well under high load
 
 
 
