@@ -184,29 +184,20 @@ Part 2
 
 When returning a list of rooms, the API designer must choose between:
 
-
-
 Option 1 — Return only room IDs
 
 Example:
 
-\["LIB-301", "ENG-204", "SCI-110"]
-
-
+["LIB-301", "ENG-204", "SCI-110"]
 
 Option 2 — Return full room objects
 
 Example:
 
-\[
-
-&#x20; { "id": "LIB-301", "name": "Library Quiet Study", "capacity": 40 },
-
-&#x20; { "id": "ENG-204", "name": "Engineering Lab", "capacity": 25 }
-
+[
+  { "id": "LIB-301", "name": "Library Quiet Study", "capacity": 40 },
+  { "id": "ENG-204", "name": "Engineering Lab", "capacity": 25 }
 ]
-
-
 
 Implications of returning only IDs
 
@@ -218,17 +209,13 @@ Faster responses for large datasets
 
 Useful when the client only needs identifiers
 
-
-
 Disadvantages
 
 Client must make additional requests to fetch details
 
-→ increases total network round‑trips
+→ increases total network round-trips
 
 → increases latency
-
-
 
 Implications of returning full objects
 
@@ -240,17 +227,13 @@ Client receives all required data in one response
 
 → simpler client logic
 
-
-
 Disadvantages
 
 Larger JSON payloads
 
 More memory and processing required on the client
 
-Slower for mobile or low‑bandwidth environments
-
-
+Slower for mobile or low-bandwidth environments
 
 Conclusion
 
