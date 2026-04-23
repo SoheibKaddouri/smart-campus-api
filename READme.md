@@ -178,69 +178,54 @@ HATEOAS transforms a REST API from a static interface into a discoverable, self�
 
 
 
-Part 2
+# Part 2
 
-**Returning IDs vs Full Room Objects**
+## Returning IDs vs Full Room Objects
 
 When returning a list of rooms, the API designer must choose between:
 
-Option 1 — Return only room IDs
+### Option 1 — Return only room IDs
 
-Example:
+**Example:**
 
+```json
 ["LIB-301", "ENG-204", "SCI-110"]
+```
 
-Option 2 — Return full room objects
+### Option 2 — Return full room objects
 
-Example:
+**Example:**
 
+```json
 [
   { "id": "LIB-301", "name": "Library Quiet Study", "capacity": 40 },
   { "id": "ENG-204", "name": "Engineering Lab", "capacity": 25 }
 ]
+```
 
-Implications of returning only IDs
+## Implications of returning only IDs
 
-Advantages
+### Advantages
+- Much smaller payload → lower network bandwidth
+- Faster responses for large datasets
+- Useful when the client only needs identifiers
 
-Much smaller payload → lower network bandwidth
+### Disadvantages
+- Client must make additional requests to fetch details → increases total network round-trips → increases latency
 
-Faster responses for large datasets
+## Implications of returning full objects
 
-Useful when the client only needs identifiers
-
-Disadvantages
-
-Client must make additional requests to fetch details
-
-→ increases total network round-trips
-
-→ increases latency
-
-Implications of returning full objects
-
-Advantages
-
-Client receives all required data in one response
-
-→ fewer API calls
-
-→ simpler client logic
-
-Disadvantages
-
-Larger JSON payloads
-
-More memory and processing required on the client
-
-Slower for mobile or low-bandwidth environments
-
-Conclusion
-
+### Advantages:
+- Client receives all required data in one response → fewer API calls → simpler client logic.
+ 
+### Disadvantages:
+- Larger JSON payloads.
+- More memory and processing required on the client.
+- Slower for mobile or low-bandwidth environments.
+ 
+## Conclusion:
 Returning full objects improves convenience and reduces client complexity, while returning only IDs improves performance and reduces bandwidth usage.
-
 The best choice depends on the expected client workload and performance constraints.
-
 
 
 **Idempotency of DELETE in My Implementation**
