@@ -140,56 +140,40 @@ Since multiple requests may access these structures at the same time, you must c
 
 
 
-**Why Hypermedia (HATEOAS) Matters in REST APIs**
+# Why Hypermedia (HATEOAS) Matters in REST APIs
 
-HATEOAS (Hypermedia As The Engine Of Application State) means that a REST API includes links inside its responses that show clients how to navigate the system.
+**HATEOAS** (Hypermedia As The Engine Of Application State) means that a REST API includes links inside its responses that show clients how to navigate the system.
 
-Instead of relying only on external documentation, the API becomes self‑describing.
+Instead of relying only on external documentation, the API becomes **self‑describing**.
 
+---
 
+### Why this is considered advanced REST design
+* **Actionable Responses:** The API tells clients what actions are possible next.
+* **Dynamic Discovery:** Clients discover available resources dynamically.
+* **Reduced Coupling:** It reduces coupling between client and server.
+* **Pure REST:** It aligns with the original REST constraints defined by Roy Fielding.
 
-Why this is considered advanced REST design
+---
 
-The API tells clients what actions are possible next.
+### Benefits for client developers
 
-Clients discover available resources dynamically.
+#### 1. Self‑navigation without documentation
+Clients can follow links like `"rooms": "/api/v1/rooms"` directly from the API response instead of reading a PDF or wiki.
 
-It reduces coupling between client and server.
-
-It aligns with the original REST constraints defined by Roy Fielding.
-
-
-
-Benefits for client developers
-
-Self‑navigation without documentation  
-
-Clients can follow links like "rooms": "/api/v1/rooms" directly from the API response instead of reading a PDF or wiki.
-
-
-
-Automatic adaptability  
-
+#### 2. Automatic adaptability
 If the server changes a URL, clients still work because they follow the links provided at runtime.
 
-
-
-Reduced errors  
-
+#### 3. Reduced errors
 Clients don’t hard‑code paths, so they avoid broken URLs.
 
-
-
-Better developer experience  
-
+#### 4. Better developer experience
 The API behaves more like a web browser:
+> → You don’t need to know every URL in advance; you just follow links.
 
-→ You don’t need to know every URL in advance; you just follow links.
+---
 
-
-
-In summary
-
+### In summary
 HATEOAS transforms a REST API from a static interface into a discoverable, self‑documenting system, making client development easier, safer, and more resilient to change.
 
 
