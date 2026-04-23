@@ -279,35 +279,27 @@ the incoming payload into a Sensor object.
 
 
 
-**Why Query Parameters Are Better for Filtering Collections**
+# Why Query Parameters Are Better for Filtering Collections
 
-Using @QueryParam for filtering (e.g., /sensors?type=CO2) is the preferred RESTful design for search and filtering operations.
+Using `@QueryParam` for filtering (e.g., `/sensors?type=CO2`) is the preferred RESTful design for search and filtering operations.
 
-
-
-1\. Query parameters express optional filtering
+## 1. Query parameters express optional filtering
 
 Filtering is not a new resource — it is a variation of the same collection.
 
 Query parameters allow:
 
-/sensors → all sensors
-
-/sensors?type=CO2 → filtered sensors
-
-/sensors?status=ACTIVE\&type=CO2 → multiple filters
+- `/sensors` → all sensors
+- `/sensors?type=CO2` → filtered sensors
+- `/sensors?status=ACTIVE&type=CO2` → multiple filters
 
 Path parameters cannot express optional filters cleanly.
 
-
-
-2\. Path parameters imply a hierarchical resource
+## 2. Path parameters imply a hierarchical resource
 
 A URL like:
 
-/sensors/type/CO2
-
-
+`/sensors/type/CO2`
 
 suggests that “type” is a sub‑resource, which is not true.
 
@@ -315,65 +307,41 @@ Type is just a filter, not a child resource.
 
 This breaks REST semantics.
 
+## 3. Query parameters allow multiple filters
 
+to support:
+```
+/sensors?type=CO2&status=ACTIVE&minValue=10
+```
 
-3\. Query parameters allow multiple filters
-
-REST APIs often support:
-
-/sensors?type=CO2\&status=ACTIVE\&minValue=10
-
-
-
-Path‑based filtering becomes messy:
-
+the path‑based filtering becomes messy:
+```
 /sensors/type/CO2/status/ACTIVE/minValue/10
+```
+This approach is harder to read, harder to maintain, and not idiomatic REST.
 
-This is harder to read, harder to maintain, and not idiomatic REST.
-
-
-
-4\. Query parameters are standard for search
+## 4. Query parameters are standard for search
 
 Almost all modern APIs use query parameters for filtering:
-
-GitHub API
-
-Google APIs
-
-Stripe API
-
-AWS APIs
-
+- GitHub API
+- Google APIs
+- Stripe API
+-AWS APIs 
 This makes your API predictable and familiar to developers.
 
-
-
-5\. Better caching and indexing
-
+## 5. Better caching and indexing 
 CDNs and proxies can cache:
-
-/sensors
-
-/sensors?type=CO2
-
+- `/sensors`
+- `/sensors?type=CO2`
 Path‑based filtering creates many unnecessary URL variations.
 
-
-
-Summary
-
+### Summary 
 @QueryParam is superior because it:
-
-Represents optional filters correctly
-
-Keeps URLs clean and REST‑compliant
-
-Supports multiple filters easily
-
-Matches industry standards
-
-Improves caching and client usability
+- Represents optional filters correctly 
+- Keeps URLs clean and REST‑compliant 
+- Supports multiple filters easily 
+- Matches industry standards 
+- Improves caching and client usability
 
 
 
