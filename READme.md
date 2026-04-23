@@ -100,8 +100,7 @@ curl -X POST http://localhost:8080/api/v1/sensors \
   }'
 ```
 
-Report Answers
-
+## Report Answers
 Part 1
 
 **JAX‑RS Resource Lifecycle**
