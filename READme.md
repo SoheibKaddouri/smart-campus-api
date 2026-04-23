@@ -528,113 +528,69 @@ This is why professional APIs never expose stack traces and always use a global 
 
 
 
-**Why JAX‑RS Filters Are Better for Logging Than Manual Logger Calls**
+# Why JAX‑RS Filters Are Better for Logging Than Manual Logger Calls
 
 Logging is a cross‑cutting concern: it applies to every endpoint, regardless of business logic.
 
 JAX‑RS filters provide a clean, centralised way to implement this.
 
-
-
-1\. Centralised Logging (Single Responsibility Principle)
+## 1. Centralised Logging (Single Responsibility Principle)
 
 If logging is implemented inside each resource method:
-
-Every method must contain Logger.info() calls
-
-Logging logic becomes duplicated
-
-Resource classes become cluttered
-
-Changes require editing many files
+- Every method must contain `Logger.info()` calls
+- Logging logic becomes duplicated
+- Resource classes become cluttered
+- Changes require editing many files
 
 Filters solve this by placing all logging in one class, keeping resource classes focused on business logic.
 
-
-
-2\. Guaranteed Coverage Across the Entire API
+## 2. Guaranteed Coverage Across the Entire API
 
 A filter intercepts:
-
-Every request
-
-Every response
-
-Even requests that never reach a resource method
-
-Even errors handled by exception mappers
+- Every request
+- Every response
+- Even requests that never reach a resource method
+- Even errors handled by exception mappers
 
 Manual logging inside resource methods cannot guarantee this coverage.
 
-
-
-3\. Consistent Logging Format
+## 3. Consistent Logging Format
 
 Filters ensure:
-
-Every request is logged the same way
-
-Every response is logged the same way
-
-No developer forgets to add logging
-
-No inconsistent formatting
+- Every request is logged the same way
+- Every response is logged the same way
+- No developer forgets to add logging
+- No inconsistent formatting
 
 This is essential for debugging and monitoring.
 
+## 4. Better Maintainability and Scalability
 
+you later decide to:
+- Add correlation IDs
+- Log execution time,
+- Log headers,
+- Log payload sizes,
 
-4\. Better Maintainability and Scalability
+you only update one filter, not 20 resource classes.
 
-If you later decide to:
-
-Add correlation IDs
-
-Log execution time
-
-Log headers
-
-Log payload sizes
-
-…you only update one filter, not 20 resource classes.
-
-
-
-5\. Cleaner, More Professional API Design
-
+## 5. Cleaner, More Professional API Design
 Resource classes should contain:
-
-Business logic
-
-Validation
-
-Domain rules
-
+- Business logic,
+- Validation,
+- Domain rules,
 They should not contain infrastructure concerns like logging.
-
 Filters keep your architecture clean and aligned with enterprise best practices.
 
-
-
-Summary
-
+## Summary 
 Using JAX‑RS filters for logging is superior because it:
-
-Centralises logging
-
-Ensures consistent behaviour
-
-Reduces duplication
-
-Improves maintainability
-
-Guarantees full API coverage
-
-Keeps resource classes clean and focused
-
+- Centralises logging,
+- Ensures consistent behaviour,
+- Reduces duplication,
+- Improves maintainability,
+- Guarantees full API coverage,
+- Keeps resource classes clean and focused.
 This is why filters are the industry‑standard approach for cross‑cutting concerns.
-
-
 
 
 
