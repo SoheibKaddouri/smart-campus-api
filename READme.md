@@ -407,86 +407,53 @@ It prevents “God classes” and allows each nested resource to evolve independ
 
 
 
-Part 5
+# Part 5
 
-**Why HTTP 422 Is More Accurate Than 404 for Missing Linked Resources**
+## Why HTTP 422 Is More Accurate Than 404 for Missing Linked Resources
 
 When a client submits a JSON payload that contains a reference to another resource (e.g., "roomId": "XYZ"), the request itself is syntactically valid:
 
-The JSON is well‑formed
-
-The fields are correct
-
-The structure matches the API contract
-
-
+- The JSON is well‑formed
+- The fields are correct
+- The structure matches the API contract
 
 The problem is semantic:
 
-The referenced resource (roomId) does not exist.
+- The referenced resource (roomId) does not exist.
 
+## Why 404 is not ideal
 
-
-Why 404 is not ideal
-
-404 Not Found means:
-
-“The requested URL does not exist.”
-
-
+**404 Not Found** means:
+> “The requested URL does not exist.”
 
 But in this scenario:
-
-The URL does exist (POST /sensors)
-
-The payload contains the invalid reference
-
-The client is not requesting /rooms/XYZ directly
+- The URL does exist (`POST /sensors`)
+- The payload contains the invalid reference
+- The client is not requesting `/rooms/XYZ` directly
 
 So 404 does not accurately describe the error.
 
+## Why 422 Unprocessable Entity is more accurate
 
-
-Why 422 Unprocessable Entity is more accurate
-
-HTTP 422 means:
-
-“The server understands the request, but semantic validation failed.”
-
-
+**HTTP 422** means:
+> “The server understands the request, but semantic validation failed.”
 
 This matches the situation perfectly:
-
-The JSON is valid
-
-The structure is valid
-
-The server can parse it
-
-
-
-But the meaning of the data is invalid
-
-(because the referenced room does not exist)
-
-
+- The JSON is valid
+- The structure is valid
+- The server can parse it
+- But the meaning of the data is invalid (because the referenced room does not exist)
 
 Thus, 422 communicates:
+> “Your request is well‑formed, but the data you supplied cannot be processed.”
 
-“Your request is well‑formed, but the data you supplied cannot be processed.”
-
-
-
-Summary
-
-404 Not Found > URL does not exist > Incorrect — the URL exist
-
-400 Bad Request	> Invalid syntax > Incorrect — JSON is valid
-
-422 Unprocessable Entity > Semantic validation failed > Perfect match
-
-
-
+## Summary
+| Status Code | Meaning | Correctness |
+|--------------|---------|--------------|
+| **404 Not Found** | URL does not exist | Incorrect — the URL exists |
+| **400 Bad Request** | Invalid syntax | Incorrect — JSON is valid |
+| **422 Unprocessable Entity** | Semantic validation failed | Perfect match |
+ 
 Therefore, 422 is the most semantically accurate status code for missing linked resources inside a valid JSON payload.
 
 
