@@ -1,0 +1,4 @@
+com\smartcampus\api\SmartCampusApplication.class
+com\smartcampus\model\Room.class
+com\smartcampus\model\Sensor.class
+com\smartcampus\model\SensorReading.class
